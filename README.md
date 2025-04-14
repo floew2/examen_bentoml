@@ -34,3 +34,15 @@ If you're starting from the provided image archive (`bento_image.tar`), load it 
 
 ```bash
 docker load -i bento_image.tar
+
+```
+### 2️⃣ Run the Container
+
+Start the API container on port 3000:
+```bash
+docker run --rm -p 3000:3000 fabianloew_admissions_prediction:latest
+
+```
+Once running, the API will be available at:
+```bash
+http://localhost:3000
