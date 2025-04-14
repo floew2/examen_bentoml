@@ -1,10 +1,20 @@
-# Examen BentoML
+# 🎓 Admissions Prediction API - BentoML & Docker
 
-Ce repertoire contient l'architecture basique afin de rendre l'évaluation pour l'examen BentoML.
+Author: Fabian Loew  
+Project: BentoML Exam – Containerized API for Predicting University Admission Chances
 
-Vous êtes libres d'ajouter d'autres dossiers ou fichiers si vous jugez utile de le faire.
+---
 
-Voici comment est construit le dossier de rendu de l'examen:
+## 📦 Project Overview
+
+This project delivers a containerized BentoML API that predicts the **chance of university admission** based on several student features. The model is trained using a regression algorithm on historical admissions data.
+
+The API includes:
+- A login endpoint secured with JWT.
+- A prediction endpoint that returns the admission chance.
+- A fully containerized environment using BentoML and Docker.
+
+---
 
 ```bash       
 ├── examen_bentoml          
@@ -16,13 +26,11 @@ Voici comment est construit le dossier de rendu de l'examen:
 │   └── README.md
 ```
 
-Afin de pouvoir commencer le projet vous devez suivre les étapes suivantes:
+## 🚀 How to Run the Project
 
-- Forker le projet sur votre compte github
+### 1️⃣ Decompress the Docker Image
 
-- Cloner le projet sur votre machine
+If you're starting from the provided image archive (`bento_image.tar`), load it into Docker:
 
-- Récuperer le jeu de données à partir du lien suivant: [Lien de téléchargement]( https://datascientest.s3-eu-west-1.amazonaws.com/examen_bentoml/admissions.csv)
-
-
-Bon travail!
+```bash
+docker load -i bento_image.tar

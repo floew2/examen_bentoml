@@ -1,0 +1,22 @@
+service: "src.service:svc"
+description: "LinearRegression Service for predicting admissions"
+labels:
+  owner: "Fabian"
+  project: "fabianloew_admissions_prediction"
+
+include:
+  - src/
+  - data/
+
+python:
+  packages:
+    - numpy
+    - pandas
+    - scikit-learn
+    - bentoml
+    - pydantic
+    - requests
+    - pyjwt
+    - datetime
+    - fastapi
+    - python-jose
