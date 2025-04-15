@@ -37,6 +37,7 @@ model_ref = bentoml.sklearn.get("admissions_regression:latest")
 model_runner = model_ref.to_runner()
 
 svc = bentoml.Service("fabianloew_admissions_prediction", runners=[model_runner])
+fabianloew_admissions_prediction = svc
 
 # Login endpoint
 @svc.api(input=JSON(), output=JSON())
