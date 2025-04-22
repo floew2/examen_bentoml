@@ -98,12 +98,13 @@ Before building or running, ensure you have:
    docker load -i bento_image.tar
    ```
 
-2. **Run the Container**
+2.  **Run the Container** 
 
-2. **Run the Container**  
-   Replace `<VERSION_TAG>` below with the specific tag you noted from the `bentoml containerize` output (e.g., `ovo36xa7hswv5lg6`).
-
-   The service will be accessible at [http://localhost:3000](http://localhost:3000)
+    Replace `<VERSION_TAG>` below with the specific tag you noted from the `bentoml containerize` output (e.g., `ovo36xa7hswv5lg6`).
+    ```bash
+    docker run --rm -p 3000:3000 fabianloew_admissions_prediction:<VERSION_TAG>
+    ```
+    The service will be accessible at http://localhost:3000. Keep this terminal running.
 
 3. **Authenticate to Get Access Token**
 

@@ -118,7 +118,7 @@ def test_predict_valid_data_with_invalid_token_string():
         headers=headers,
         json=VALID_PREDICTION_PAYLOAD
     )
-    assert response.status_code == 200 # Should be 401/403 if validation was implemented
+    assert response.status_code == 200
     assert "chance_of_admit" in response.json()
     print("\nWARNING: test_predict_valid_data_with_invalid_token_string passed (200 OK), "
           "but service.py is missing token validation on /predict.")
@@ -129,7 +129,7 @@ def test_predict_valid_data_with_wrong_secret_token():
     """
     expiration = datetime.utcnow() + timedelta(minutes=30)
     payload = {"sub": VALID_USERNAME, "exp": expiration}
-    wrong_secret_token = jwt.encode(payload, "wrong-secret-key", algorithm=ALGORITHM) # Use wrong key
+    wrong_secret_token = jwt.encode(payload, "wrong-secret-key", algorithm=ALGORITHM)
     headers = {"Authorization": f"Bearer {wrong_secret_token}"}
 
     response = requests.post(
@@ -137,7 +137,7 @@ def test_predict_valid_data_with_wrong_secret_token():
         headers=headers,
         json=VALID_PREDICTION_PAYLOAD
     )
-    assert response.status_code == 200 # Should be 401/403 if validation was implemented
+    assert response.status_code == 200
     assert "chance_of_admit" in response.json()
     print("\nWARNING: test_predict_valid_data_with_wrong_secret_token passed (200 OK), "
           "but service.py is missing token validation on /predict.")
@@ -148,7 +148,7 @@ def test_predict_invalid_data_type():
     valid_token = create_valid_token()
     headers = {"Authorization": f"Bearer {valid_token}"}
     invalid_payload = VALID_PREDICTION_PAYLOAD.copy()
-    invalid_payload["GRE_Score"] = "this should be a float" # Invalid type
+    invalid_payload["GRE_Score"] = "this should be a float"
 
     response = requests.post(
         f"{BASE_URL}/predict",
@@ -174,7 +174,6 @@ def test_predict_missing_field():
         headers=headers,
         json=invalid_payload
     )
-    # Expecting 400 based on logs
     assert response.status_code == 400
     assert isinstance(response.text, str)
     assert "CGPA" in response.text
