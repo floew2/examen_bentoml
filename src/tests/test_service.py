@@ -96,7 +96,6 @@ def test_predict_valid_data_with_valid_token():
 def test_predict_valid_data_with_missing_token():
     """
     Test prediction with valid data but NO token.
-    EXPECTED TO PASS (200 OK) because service.py currently doesn't validate tokens on /predict.
     """
     response = requests.post(
         f"{BASE_URL}/predict",
