@@ -1,187 +1,217 @@
-# 🎓 Admissions Prediction API - BentoML & Docker
+# ADMISSIONS PREDICTION API - BENTOML & DOCKER
 
-**Author**: Fabian Loew\
+**Author**: Fabian Loew  
 **Project**: BentoML Exam – Containerized API for Predicting University Admission Chances
 
 ---
 
-## 📆 Project Overview
+## PROJECT OVERVIEW
 
-This project delivers a containerized BentoML API that predicts the **chance of university admission** based on student features.\
+This project delivers a containerized BentoML API that predicts the chance of university admission based on student features.  
 The model is trained using a regression algorithm on historical admissions data.
 
 The API includes:
-
 - A `/login` endpoint secured with JWT for authentication.
 - A `/predict` endpoint that returns the admission chance.
 - A containerized BentoML service using Docker.
 
 ---
 
-## 🛠️ Part 1: Build and Package the API
+## PREREQUISITES & SETUP
 
-### 1. (Optional) Create or Rebuild the Bento
+Before building or running, ensure you have:
+- Python 3.x installed.
+- Docker Desktop (or Docker Engine/CLI) installed and running.
+- The project files downloaded or cloned.
 
-If not done already, you can build the Bento from source:
+### Setup Steps
 
-```bash
-bentoml build
-```
+1. **Navigate to the Project Root**  
+   Open your terminal and change to the `examen_bentoml` directory (the one containing `src/`, `data/`, `bentofile.yaml`, etc.).
 
-This uses the configuration in `bentofile.yaml`.
+   ```bash
+   cd /path/to/your/BentoML_Exam/examen_bentoml
+   ```
 
----
+2. **Create and Activate Virtual Environment (Recommended)**
 
-### 2. Containerize the Bento
+   ```bash
+   python3 -m venv venv
+   # On macOS/Linux:
+   source venv/bin/activate
+   # On Windows:
+   .\venv\Scripts\activate
+   ```
 
-Build the Docker image from the Bento:
+3. **Install Dependencies**  
+   Install packages required for building the Bento, running scripts, and running tests.
 
-```bash
-bentoml containerize fabianloew_admissions_prediction:latest
-```
+   ```bash
+   pip install numpy pandas scikit-learn bentoml pydantic python-jose[cryptography] pytest requests
+   ```
 
-This creates a Docker image named `fabianloew_admissions_prediction:latest`.
+4. **Prepare Data**  
+   Run the script to split the raw data into training and testing sets.
 
----
+   ```bash
+   python src/prepare_data.py
+   ```
 
-## 🥚 Part 2: Run the Container and Test the API
+5. **Train and Save Model**  
+   Run the training script to train the model and save it to the local BentoML model store with the tag `admissions_regression:latest`.
 
-### 1. Load Docker Image (if provided as tar file)
-
-If the image was submitted as `bento_image.tar`, load it with:
-
-```bash
-docker load -i bento_image.tar
-```
-
----
-
-### 2. Run the Container
-
-Start the container and expose the API on port 3000:
-
-```bash
-docker run --rm -p 3000:3000 fabianloew_admissions_prediction:latest
-```
-
-You should now see BentoML start the service at `http://localhost:3000`.
-
----
-
-### 3. Authenticate to Get Access Token
-
-Make a POST request to `/login` to retrieve a JWT access token:
-
-```http
-POST http://localhost:3000/login
-```
-
-**Body**:
-
-```json
-{
-  "username": "admin",
-  "password": "admin"
-}
-```
-
-**Response**:
-
-```json
-{
-  "access_token": "<JWT_TOKEN>"
-}
-```
+   ```bash
+   python src/train_model.py
+   ```
 
 ---
 
-### 4. Call the Prediction Endpoint
+## PART 1: BUILD BENTO & DOCKER IMAGE
 
-Use the token from `/login` to call `/predict`:
+*Ensure you are in the `examen_bentoml` directory and your virtual environment is active.*
 
-```http
-POST http://localhost:3000/predict
-```
+1. **Build the Bento**  
+   Package the service code, model, and dependencies into a Bento.
 
-**Headers**:
+   ```bash
+   bentoml build
+   ```
 
-```
-Authorization: Bearer <JWT_TOKEN>
-Content-Type: application/json
-```
+   This uses the configuration in `bentofile.yaml`. Note the output tag (e.g., `fabianloew_admissions_prediction:<VERSION>`).
 
-**Body**:
+2. **Containerize the Bento**
 
-```json
-{
-  "GRE": 330,
-  "TOEFL": 110,
-  "UniversityRating": 4,
-  "SOP": 4.5,
-  "LOR": 4.8,
-  "CGPA": 9.5,
-  "Research": 1
-}
-```
+   ```bash
+   bentoml containerize fabianloew_admissions_prediction:latest
+   ```
 
-**Expected response**:
-
-```json
-{
-  "chance_of_admit": [0.90]
-}
-```
+   
+   This creates a Docker image. **Note the specific version tag** output by this command (e.g., `fabianloew_admissions_prediction:ovo36xa7hswv5lg6`). You will need this tag for the next steps.
 
 ---
 
-### ✅ Run Unit Tests
+## PART 2: RUN CONTAINER & TEST API
 
-With the API running on `localhost:3000`, execute:
+1. **Load Docker Image (if provided as tar file)**
 
-```bash
-python3 -m pytest tests/test_service.py
-```
+   ```bash
+   docker load -i bento_image.tar
+   ```
 
-All tests should pass with `PASSED` status.
+2. **Run the Container**
+
+2. **Run the Container**  
+   Replace `<VERSION_TAG>` below with the specific tag you noted from the `bentoml containerize` output (e.g., `ovo36xa7hswv5lg6`).
+
+   The service will be accessible at [http://localhost:3000](http://localhost:3000)
+
+3. **Authenticate to Get Access Token**
+
+   ```http
+   POST http://localhost:3000/login
+   ```
+
+   **Body**:
+   ```json
+   {
+     "username": "admin",
+     "password": "admin"
+   }
+   ```
+
+   **Response**:
+   ```json
+   {
+     "access_token": "<JWT_TOKEN>"
+   }
+   ```
+
+4. **Call the Prediction Endpoint**
+
+   ```http
+   POST http://localhost:3000/predict
+   ```
+
+   **Headers**:
+   ```
+   Authorization: Bearer <JWT_TOKEN>
+   Content-Type: application/json
+   ```
+
+   **Body**:
+   ```json
+   {
+     "GRE_Score": 330.0,
+     "TOEFL_Score": 110.0,
+     "University_Rating": 4.0,
+     "SOP": 4.8,
+     "LOR": 4.5,
+     "CGPA": 9.5,
+     "Research": 1
+   }
+   ```
+
+   **Expected Response**:
+   ```json
+   {
+     "chance_of_admit": [0.901049...]
+   }
+   ```
+
+5. **Run Unit Tests**
+
+   ```bash
+   pytest src/tests/test_service.py -v
+   ```
 
 ---
 
-## 🗂️ Project Structure
+## PROJECT STRUCTURE
 
 ```
 .
+├── data/
+│   ├── raw/
+│   │   └── admission.csv       # Original dataset
+│   └── processed/              # Output of prepare_data.py
+│       ├── X_train.csv
+│       ├── X_test.csv
+│       ├── y_train.csv
+│       └── y_test.csv
 ├── src/
-│   ├── service.py          # BentoML API service
-│   └── test_api.py         # Manual API test
-├── tests/
-│   └── test_service.py     # Unit tests
-├── bentofile.yaml          # BentoML build config
-├── bento_image.tar         # Exported Docker image
-└── README.md               # This file
+│   ├── prepare_data.py         # Data splitting script
+│   ├── train_model.py          # Model training & saving script
+│   ├── service.py              # BentoML API service definition
+│   └── tests/
+│       └── test_service.py     # Pytest unit/integration tests
+├── venv/                       # Virtual environment (if created)
+├── bentofile.yaml              # BentoML build configuration
+└── README.md                   # This file
 ```
 
 ---
 
-## 📄 Export Docker Image for Submission
+## EXPORT DOCKER IMAGE FOR SUBMISSION
 
-Make sure the Docker image name follows the required format:
-
+If required, save the built Docker image to a tar file. Replace `<VERSION_TAG>` below with the specific tag you noted from the `bentoml containerize` output (e.g., `ovo36xa7hswv5lg6`).
 ```bash
-docker save -o bento_image.tar fabianloew_admissions_prediction:latest
+docker save -o bento_image.tar fabianloew_admissions_prediction:<VERSION_TAG>
 ```
-
-⚠️ Use this exact format: `<yourname>_<imagename>` → `fabianloew_admissions_prediction`
 
 ---
 
-## 📦 Python Dependencies
+## PYTHON DEPENDENCIES
 
-Ensure the following are included in `bentofile.yaml`:
+**Core Build/Run Dependencies (defined in `bentofile.yaml`):**
+- numpy
+- pandas
+- scikit-learn
+- bentoml
+- pydantic
+- python-jose
 
-- `numpy`
-- `pandas`
-- `scikit-learn`
-- `bentoml`
-- `pydantic`
-- `requests`
-- `python-jose`
+**Local Setup/Testing Dependencies:**
+- pytest
+- requests
+
+These are installed during the setup step using `pip install ...`.
