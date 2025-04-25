@@ -3,9 +3,9 @@ import bentoml
 from bentoml import Context
 from bentoml.io import JSON
 from pydantic import BaseModel
-from fastapi import HTTPException
+from fastapi import HTTPException, status
 from datetime import datetime, timedelta
-from jose import jwt
+from jose import jwt, JWTError, ExpiredSignatureError
 
 # Secret for JWT
 SECRET_KEY = "my-super-secret"
