@@ -119,7 +119,7 @@ Before building or running, ensure you have:
 
    **Expected Output and Action**:
    You will receive a JSON response containing the token:
-   ```
+   ```json
    {"access_token":"<SOME_LONG_JWT_TOKEN_STRING>"}
    ```
    Copy the actual token string (the value associated with the "access_token" key, without the quotes) from the response. You'll need it in the next step.
@@ -128,7 +128,7 @@ Before building or running, ensure you have:
 Now, use the token you just copied to make an authorized request to the /predict endpoint. Replace <YOUR_TOKEN_HERE> in the command below with the actual token you copied.
 
    ```bash
-       curl -X POST \
+   curl -X POST \
       -H "Authorization: Bearer <YOUR_TOKEN_HERE>" \
       -H "Content-Type: application/json" \
       -d '{
