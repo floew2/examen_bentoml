@@ -190,15 +190,6 @@ Before building or running, ensure you have:
 
 ---
 
-## EXPORT DOCKER IMAGE FOR SUBMISSION
-
-If required, save the built Docker image to a tar file. Replace `<VERSION_TAG>` below with the specific tag you noted from the `bentoml containerize` output (e.g., `ovo36xa7hswv5lg6`).
-```bash
-docker save -o bento_image.tar fabianloew_admissions_prediction:<VERSION_TAG>
-```
-
----
-
 ## PYTHON DEPENDENCIES
 
 **Core Build/Run Dependencies (defined in `bentofile.yaml`):**
