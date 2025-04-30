@@ -106,7 +106,7 @@ Before building or running, ensure you have:
 
 3. **Get an Access Token (Authentication)**
    Before you can use the /predict endpoint, you need to authenticate via the /login endpoint to get a temporary access token (JWT). Open a new terminal window and run the following curl command:
-   ```
+   ```bash
     curl -X POST \
       -H "Content-Type: application/json" \
       -d '{
@@ -127,7 +127,7 @@ Before building or running, ensure you have:
 4. **CMake the Prediction Request**
 Now, use the token you just copied to make an authorized request to the /predict endpoint. Replace <YOUR_TOKEN_HERE> in the command below with the actual token you copied.
 
-   ```
+   ```bash
        curl -X POST \
       -H "Authorization: Bearer <YOUR_TOKEN_HERE>" \
       -H "Content-Type: application/json" \
