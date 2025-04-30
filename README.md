@@ -151,6 +151,7 @@ Now, use the token you just copied to make an authorized request to the /predict
    {"chance_of_admit":[0.901049...]}
         
    ```
+   You have now successfully used the running API to get an authenticated prediction! You can repeat Step 4 with different data in the JSON body (-d '...') as long as your token hasn't expired (it's valid for 30 minutes by default). If it expires, just repeat Step 3 to get a new token.
 
 5. **Run Unit Tests**
 
