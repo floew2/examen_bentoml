@@ -104,57 +104,52 @@ Before building or running, ensure you have:
     ```
     The service will be accessible at http://localhost:3000. Keep this terminal running.
 
-3. **Authenticate to Get Access Token**
-
-   ```http
-   POST http://localhost:3000/login
+3. **Get an Access Token (Authentication)**
+   Before you can use the /predict endpoint, you need to authenticate via the /login endpoint to get a temporary access token (JWT). Open a new terminal window and run the following curl command:
+   ```
+    curl -X POST \
+      -H "Content-Type: application/json" \
+      -d '{
+         "username": "admin",
+         "password": "admin"
+          }' \
+    http://localhost:3000/login
    ```
 
-   **Body**:
+
+   **Expected Output and Action**:
+   You will receive a JSON response containing the token:
+   ```
+   {"access_token":"<SOME_LONG_JWT_TOKEN_STRING>"}
+   ```
+   Copy the actual token string (the value associated with the "access_token" key, without the quotes) from the response. You'll need it in the next step.
+
+4. **CMake the Prediction Request**
+Now, use the token you just copied to make an authorized request to the /predict endpoint. Replace <YOUR_TOKEN_HERE> in the command below with the actual token you copied.
+
+   ```
+       curl -X POST \
+      -H "Authorization: Bearer <YOUR_TOKEN_HERE>" \
+      -H "Content-Type: application/json" \
+      -d '{
+            "GRE_Score": 330.0,
+            "TOEFL_Score": 110.0,
+            "University_Rating": 4.0,
+            "SOP": 4.8,
+            "LOR": 4.5,
+            "CGPA": 9.5,
+            "Research": 1
+          }' \
+      http://localhost:3000/predict
+    
+   ```
+
+   **Expected Output:**:
+   You should receive the prediction result
    ```json
-   {
-     "username": "admin",
-     "password": "admin"
-   }
-   ```
-
-   **Response**:
-   ```json
-   {
-     "access_token": "<JWT_TOKEN>"
-   }
-   ```
-
-4. **Call the Prediction Endpoint**
-
-   ```http
-   POST http://localhost:3000/predict
-   ```
-
-   **Headers**:
-   ```
-   Authorization: Bearer <JWT_TOKEN>
-   Content-Type: application/json
-   ```
-
-   **Body**:
-   ```json
-   {
-     "GRE_Score": 330.0,
-     "TOEFL_Score": 110.0,
-     "University_Rating": 4.0,
-     "SOP": 4.8,
-     "LOR": 4.5,
-     "CGPA": 9.5,
-     "Research": 1
-   }
-   ```
-
-   **Expected Response**:
-   ```json
-   {
-     "chance_of_admit": [0.901049...]
-   }
+   
+   {"chance_of_admit":[0.901049...]}
+        
    ```
 
 5. **Run Unit Tests**
