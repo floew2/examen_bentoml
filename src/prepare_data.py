@@ -7,7 +7,7 @@ data_path = "data/raw/admission.csv"
 df = pd.read_csv(data_path)
 
 # 2. Optional cleanup (drop any unnecessary columns)
-# If 'Serial No.' exists, drop it
+# If 'Serial No.' exists, drop it as we dont need it for our model
 df.drop(columns=["Serial No."], inplace=True, errors="ignore")
 
 # 3. Define features and target

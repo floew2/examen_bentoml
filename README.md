@@ -34,7 +34,6 @@ Before building or running, ensure you have:
    ```
 
 2. **Create and Activate Virtual Environment (Recommended)**
-
    ```bash
    python3 -m venv venv
    # On macOS/Linux:
@@ -43,11 +42,10 @@ Before building or running, ensure you have:
    .\venv\Scripts\activate
    ```
 
-3. **Install Dependencies**  
-   Install packages required for building the Bento, running scripts, and running tests.
-
+3. **Install Dependencies**
+   Install the main packages required for local development, testing, and building the Bento. `pip` will handle installing their dependencies automatically.
    ```bash
-   pip install numpy pandas scikit-learn bentoml pydantic python-jose[cryptography] pytest requests
+   pip install numpy pandas scikit-learn bentoml pydantic python-jose[cryptography] pytest requests fastapi
    ```
 
 4. **Prepare Data**  
@@ -100,7 +98,7 @@ Before building or running, ensure you have:
 
 2.  **Run the Container** 
 
-    Replace `<VERSION_TAG>` below with the specific tag you noted from the `bentoml containerize` output (e.g., `ovo36xa7hswv5lg6`).
+    Replace `<VERSION_TAG>` below with the specific tag you noted from the `bentoml containerize` output (e.g., `gjbyblrbsoy45lg6`).
     ```bash
     docker run --rm -p 3000:3000 fabianloew_admissions_prediction:<VERSION_TAG>
     ```
